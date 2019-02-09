@@ -1,0 +1,22 @@
+###########################################################################################################
+# Vivado creates a lot files that are not of interest for this repository, which is why we use a whitelist.
+###########################################################################################################
+
+# Exclude all
+*
+
+# Allow root dir and .gitignore
+!*/
+!.gitignore
+
+# Allow VHDL files
+!*.vhd
+
+# Allow Python files
+!*.py
+
+# Allow Markdown
+!*.md
+
+# Allow PDF
+!*.pdf
