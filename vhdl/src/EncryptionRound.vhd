@@ -46,17 +46,16 @@ use work.Speck_pkg.key_schedule_round;
 entity EncryptionRound is
     generic (
         BLOCK_SIZE: INTEGER := 64;
-        KEY_SIZE: INTEGER := 96;
-        WORD_SIZE: INTEGER := BLOCK_SIZE / 2
+        KEY_SIZE: INTEGER := 96
     );
     port
     (
-        word_0, word_1: in UNSIGNED(WORD_SIZE - 1 downto 0);
-        subkey_0, subkey_1, subkey_2, subkey_3: in UNSIGNED(WORD_SIZE - 1 downto 0);
-        index: in UNSIGNED(WORD_SIZE - 1 downto 0);
+        word_0, word_1: in UNSIGNED(BLOCK_SIZE / 2 - 1 downto 0);
+        subkey_0, subkey_1, subkey_2, subkey_3: in UNSIGNED(BLOCK_SIZE / 2 - 1 downto 0);
+        index: in UNSIGNED(BLOCK_SIZE / 2 - 1 downto 0);
         clk: in std_logic;
-        word_0_out, word_1_out: out UNSIGNED(WORD_SIZE - 1 downto 0);
-        subkey_0_out, subkey_1_out, subkey_2_out, subkey_3_out: out UNSIGNED(WORD_SIZE - 1 downto 0)
+        word_0_out, word_1_out: out UNSIGNED(BLOCK_SIZE / 2 - 1 downto 0);
+        subkey_0_out, subkey_1_out, subkey_2_out, subkey_3_out: out UNSIGNED(BLOCK_SIZE / 2 - 1 downto 0)
     );
 end EncryptionRound;
 
@@ -64,6 +63,7 @@ architecture Behavioral of EncryptionRound is
 begin
 
 ENC: process(word_0, word_1, subkey_0, subkey_1, subkey_2, subkey_3, index, clk)
+        constant WORD_SIZE: INTEGER := BLOCK_SIZE / 2;
         type SUBKEY_ARRAY is array (3 downto 0) of UNSIGNED(WORD_SIZE - 1 downto 0);
         variable encryption_round_outputs: UNSIGNED(WORD_SIZE * 2 - 1 downto 0);
         variable subkeys_out: UNSIGNED(WORD_SIZE * 4 - 1 downto 0);   

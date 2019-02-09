@@ -46,13 +46,12 @@ use work.Speck_pkg.num_rounds;
 entity CTRSpeck is
     generic (
         BLOCK_SIZE: INTEGER := 64;
-        KEY_SIZE: INTEGER := 96;
-        WORD_SIZE: INTEGER := BLOCK_SIZE / 2
+        KEY_SIZE: INTEGER := 96
     );
     port (
         data_in: in UNSIGNED(BLOCK_SIZE - 1 downto 0); 
         key: in UNSIGNED(KEY_SIZE - 1 downto 0);
-        nonce: in UNSIGNED(WORD_SIZE - 1 downto 0);
+        nonce: in UNSIGNED(BLOCK_SIZE / 2 - 1 downto 0);
         clk: in std_logic;
         reset: in std_logic;
         data_out: out UNSIGNED(BLOCK_SIZE - 1 downto 0); 
@@ -75,6 +74,7 @@ ENC: entity work.Encrypt
      );
 
 CTR: process(data_in, nonce, clk, reset)
+    constant WORD_SIZE: INTEGER := BLOCK_SIZE / 2;
     constant num_rounds: INTEGER := num_rounds(BLOCK_SIZE, KEY_SIZE);
     constant shift: INTEGER := BLOCK_SIZE;
     variable counter: UNSIGNED(WORD_SIZE downto 0); -- Note that it's one bit larger to detect overflow

@@ -46,8 +46,7 @@ use work.Speck_pkg.num_rounds;
 entity Encrypt is
     generic (
         BLOCK_SIZE: INTEGER := 64;
-        KEY_SIZE: INTEGER := 96;
-        WORD_SIZE: INTEGER := BLOCK_SIZE / 2
+        KEY_SIZE: INTEGER := 96
     );
     port
     (
@@ -59,6 +58,7 @@ entity Encrypt is
 end Encrypt;
 
 architecture Behavioral of Encrypt is
+    constant WORD_SIZE: INTEGER := BLOCK_SIZE / 2;
     constant num_rounds: INTEGER := num_rounds(BLOCK_SIZE, KEY_SIZE);
     constant num_keys: INTEGER := KEY_SIZE / WORD_SIZE;
     type TMP_VEC is array (num_rounds downto 0) of UNSIGNED(WORD_SIZE - 1 downto 0);
