@@ -1,5 +1,5 @@
 # Test
-This directory contains two kind of test scripts, unit tests and scripts for generating (partial) VHDL testbenches.
+This directory contains two kinds of test scripts, unit tests and scripts for generating (partial) VHDL testbenches.
 
 ## Unit test
 The file `test.py` contains unit tests for the Speck cipher implemented in Python. You can run them by using the following command in the `ske/python` directory: `python -m unittest test.test`
