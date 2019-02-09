@@ -3,7 +3,7 @@ This repository contains a VHDL and Python implementation of the Speck cipher as
 
 **Do not use this code to process sensitive information.** While we have done our best to ensure correctness, the code has not been audited and may be susceptible to cryptographic attacks. Cryptography is a challenging field, simple mistakes can have disastrous consequences for the security of the encryption. In fact even the National Security Agency made a [little but not insignificant mistake](https://github.com/nsacyber/simon-speck/issues/1) in the implementation guide for the Speck and Simon ciphers which I discovered during the development. Although the actual reference implementation did not contain the error, the code from the implementation guide would have caused undefined behavior. We are not less likely to make mistakes than the researchers at the NSA therefore be aware of the risk when using our code.
 
-## Dependencies
+## Requirements
 The VHDL testbenches use VHDL-2008 and therefore require a simulation tool that supports this standard, e.g. `Vivado 2016.4` and later. The Python implementation requires `Python 3.6` or later.
 
 ## Register Transfer Logic
