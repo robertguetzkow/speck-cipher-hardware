@@ -1,6 +1,6 @@
 # Speck Cipher Hardware
 This repository contains a VHDL and Python implementation of the Speck cipher as described in NSA documents [0,1]. The VHDL code of Speck is pipelined.
-**Do not use this code for processing sensitive information.** While we have done our best to ensure correctness, the code has not been audited and may be susceptible to cryptographic attacks.
+**Do not use this code to process sensitive information.** While we have done our best to ensure correctness, the code has not been audited and may be susceptible to cryptographic attacks.
 
 ## Dependencies
 The VHDL implementation and testbenches use a subset of VHDL-2008 and therefore require a synthesis and simulation tool that supports this standard, e.g. `Vivado 2016` and later. The Python implementation requires `Python 3.6` or later.
