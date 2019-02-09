@@ -20,3 +20,6 @@
 
 # Allow PDF
 !*.pdf
+
+# Allow SVGs
+!*.svg

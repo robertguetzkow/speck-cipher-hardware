@@ -6,7 +6,7 @@ This repository contains a VHDL and Python implementation of the Speck cipher as
 The VHDL implementation and testbenches use a subset of VHDL-2008 and therefore require a synthesis and simulation tool that supports this standard, e.g. `Vivado 2016` and later. The Python implementation requires `Python 3.6` or later.
 
 ## Register Transfer Logic
-The following images show the RTL design of Speck 64 96.
+The following images show the RTL schematics of Speck 64 96.
 ![CTR Mode](./imgs/ctr_rtl_schematic.svg)
 ![Encryption Pipeline](./imgs/encryption_pipeline_rtl_schematic.svg)
 ![Encryption Round](./imgs/encryption_round_rtl_schematic.svg)
