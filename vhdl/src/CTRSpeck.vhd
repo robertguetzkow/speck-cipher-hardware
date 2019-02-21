@@ -100,14 +100,14 @@ CTR: process(data_in, key, nonce, valid, clk, reset)
     -- encryption pipeline and therefore output signals from the pipeline are valid as well. Since interfaces such as AXI4-Lite are
     -- not able to write/update all input signals to CTRSpeck within one clock cycle, incomplete updates would be read if there 
     -- wasn't a validity check. In order to avoid the read-write conflict, similar to race conditions in software, updated are only
-    -- performed once 'valid' is enabled.
+    -- performed once 'valid' is enabled. Note that after a reset, data may still by in the encryption pipeline, resulting in
+    -- output without 'ready' enabled.
     variable data_valid_temp: UNSIGNED(BLOCK_SIZE - 1 downto 0);
     variable key_valid_temp: UNSIGNED(KEY_SIZE - 1 downto 0);
 
     begin   
         if reset = '1' then
             counter := to_unsigned(0, counter'length);
-            shift_reg_data := to_unsigned(0, shift_reg_data'length);
             shift_reg_valid := to_unsigned(0, shift_reg_valid'length);
             ready <= '0';
             ctr_wrap <= '0';
