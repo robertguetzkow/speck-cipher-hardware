@@ -49,14 +49,14 @@ entity CTRSpeck is
         KEY_SIZE: INTEGER := 96
     );
     port (   
-        data_in: in UNSIGNED(BLOCK_SIZE - 1 downto 0); 
+        data_in: in UNSIGNED(BLOCK_SIZE - 1 downto 0);
         key: in UNSIGNED(KEY_SIZE - 1 downto 0);
         nonce: in UNSIGNED(BLOCK_SIZE / 2 - 1 downto 0);
         valid: in std_logic; -- Indicates new values for data_in, key and nonce are ready to be processed. Inputs are ignored otherwise.
         clk: in std_logic;
         reset: in std_logic;
-        data_out: out UNSIGNED(BLOCK_SIZE - 1 downto 0);    
-        ready: out std_logic; -- Set to '1' when new output is ready   
+        data_out: out UNSIGNED(BLOCK_SIZE - 1 downto 0);
+        ready: out std_logic; -- Set to '1' when new output is ready
         ctr_wrap: out std_logic -- Set to '1' when counter wraps. When this happens change the nonce!
     );
 end CTRSpeck;
@@ -80,23 +80,27 @@ CTR: process(data_in, key, nonce, valid, clk, reset)
     constant num_rounds: INTEGER := num_rounds(BLOCK_SIZE, KEY_SIZE);
     variable counter: UNSIGNED(WORD_SIZE downto 0); -- Note that it's one bit larger to detect overflow
     
-    -- Shift register storing the 'data_in' value. This is necessary because with CTR mode the ('nonce' concat 'counter') gets encrypted which is then xor'ed with the plaintext input to
-    -- form the final ciphertext. Because the encryption pipeline has a latency of 'num_rounds' clock cycles, the data_in may have changed in the meantime. In order to ensure the original
-    -- data_in remains available, it is stored. The shift register stores 'num_rounds' + 1 elements, due to the additional clock cycle used for handling signal validity.
-    variable shift_reg_data: UNSIGNED(BLOCK_SIZE * (num_rounds + 1) - 1 downto 0); 
+    -- Shift register storing the 'data_in' value. This is necessary because with CTR mode the ('nonce' concat 'counter') gets 
+    -- encrypted which is then xor'ed with the plaintext input to form the final ciphertext. Because the encryption pipeline has
+    -- a latency of 'num_rounds' clock cycles, the data_in may have changed in the meantime. In order to ensure the original
+    -- data_in remains available, it is stored. The shift register stores 'num_rounds' + 1 elements, due to the additional clock 
+    -- cycle used for handling signal validity.
+    variable shift_reg_data: UNSIGNED(BLOCK_SIZE * (num_rounds + 1) - 1 downto 0);
     
-    -- Shift register storing the 'valid' value. This allows to track the progress of values passing through the encryption pipeline. The valid bit reaches the end of the shift register
-    -- in the same clock cycles as the corresponding encrypted value is at the output of the encryption pipeline. The 'ready' signal can then be enabled to indicate that a new encrypted
-    -- output is available.
+    -- Shift register storing the 'valid' value. This allows to track the progress of values passing through the encryption pipeline.
+    -- The valid bit reaches the end of the shift register in the same clock cycles as the corresponding encrypted value is at the 
+    -- output of the encryption pipeline. The 'ready' signal can then be enabled to indicate that a new encrypted output is available.
     variable shift_reg_valid: UNSIGNED(num_rounds downto 0);
     
     -- Temporary variables for storing output from the shift register.
     variable data_temp: UNSIGNED(BLOCK_SIZE - 1 downto 0);
     variable valid_temp: std_logic;
     
-    -- Temporary variables for storing input signals, once 'valid' is enabled. This allows to put only valid input signals into the encryption pipeline and therefore output signals from the
-    -- pipeline are valid as well. Since interfaces such as AXI4-Lite are not able to write/update all input signals to CTRSpeck within one clock cycle, incomplete updates would be read if
-    -- there wasn't a validity check. In order to avoid the read-write conflict, similar to race conditions in software, updated are only performed once 'valid' is enabled.
+    -- Temporary variables for storing input signals, once 'valid' is enabled. This allows to put only valid input signals into the
+    -- encryption pipeline and therefore output signals from the pipeline are valid as well. Since interfaces such as AXI4-Lite are
+    -- not able to write/update all input signals to CTRSpeck within one clock cycle, incomplete updates would be read if there 
+    -- wasn't a validity check. In order to avoid the read-write conflict, similar to race conditions in software, updated are only
+    -- performed once 'valid' is enabled.
     variable data_valid_temp: UNSIGNED(BLOCK_SIZE - 1 downto 0);
     variable key_valid_temp: UNSIGNED(KEY_SIZE - 1 downto 0);
 
@@ -109,7 +113,8 @@ CTR: process(data_in, key, nonce, valid, clk, reset)
             ctr_wrap <= '0';
         else      
             if counter(WORD_SIZE) = '1' then
-               -- Once the highest bit is set, the counter is wrapping. This is a security issue and the nonce should be changed to avoid chosen plaintext attacks.
+                -- Once the highest bit is set, the counter is wrapping. This is a security issue and the nonce should be changed to
+                -- avoid chosen plaintext attacks.
                 ctr_wrap <= '1';
                 counter(WORD_SIZE) := '0'; -- Wrap counter for well defined behavior
             else
@@ -124,9 +129,9 @@ CTR: process(data_in, key, nonce, valid, clk, reset)
                 end if;
             
                 -- Get the data_in corresponding to the latest output of the pipeline
-                data_temp := shift_reg_data(BLOCK_SIZE * (num_rounds + 1) - 1 downto BLOCK_SIZE * num_rounds); 
+                data_temp := shift_reg_data(BLOCK_SIZE * (num_rounds + 1) - 1 downto BLOCK_SIZE * num_rounds);
                 
-                shift_reg_data := shift_left(shift_reg_data, BLOCK_SIZE);   
+                shift_reg_data := shift_left(shift_reg_data, BLOCK_SIZE);
                 
                 -- Store the current data_in for when the pipeline is done and results can be xor'ed
                 shift_reg_data(BLOCK_SIZE - 1 downto 0) := data_in;
@@ -142,12 +147,12 @@ CTR: process(data_in, key, nonce, valid, clk, reset)
                 data_out <= data_temp xor ciphertext;
                 
                 -- Set ready to valid_temp, which will be '1' when a new value has passed through the pipeline
-                ready <= valid_temp;           
+                ready <= valid_temp;
             end if;
             
-			-- Set input signals for the encryption pipeline
+            -- Set input signals for the encryption pipeline
             plaintext_valid <= data_valid_temp;
-            key_valid <= key_valid_temp;              
+            key_valid <= key_valid_temp;
         end if;
     end process;
 
