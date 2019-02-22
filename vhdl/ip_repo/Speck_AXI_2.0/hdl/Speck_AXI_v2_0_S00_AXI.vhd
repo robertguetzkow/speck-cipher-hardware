@@ -263,15 +263,20 @@ begin
 	-- and the slave is ready to accept the write address and write data.
 	slv_reg_wren <= axi_wready and S_AXI_WVALID and axi_awready and S_AXI_AWVALID ;
 
-	process (S_AXI_ACLK, slv_reg15)
+	process (S_AXI_ACLK, slv_reg14)
 	variable loc_addr :std_logic_vector(OPT_MEM_ADDR_BITS downto 0); 
 	begin
 	  -- Reset 'valid' signal automatically after half a clock cycle.
-	  if slv_reg15(0) = '1' and falling_edge(S_AXI_ACLK) then
-	      slv_reg15(0) <= '0';
-	  end if;
+--	  if slv_reg14(0) = '1' and falling_edge(S_AXI_ACLK) then
+--	      slv_reg14(0) <= '0';
+--	  end if;
 
 	  if rising_edge(S_AXI_ACLK) then
+	    if slv_reg14(0) = '1' then  
+	      -- Reset 'valid' signal automatically after a clock cycle.
+	      slv_reg14(0) <= '0';
+	    end if;
+	  
 	    if S_AXI_ARESETN = '0' then
 	      slv_reg0 <= (others => '0');
 	      slv_reg1 <= (others => '0');
@@ -289,11 +294,6 @@ begin
 	      slv_reg13 <= (others => '0');
 	      slv_reg14 <= (others => '0');
 	      slv_reg15 <= (others => '0');
---	      slv_reg16 <= (others => '0');
---	      slv_reg17 <= (others => '0');
---	      slv_reg18 <= (others => '0');
---	      slv_reg19 <= (others => '0');
---	      slv_reg20 <= (others => '0');
 	    else
 	      loc_addr := axi_awaddr(ADDR_LSB + OPT_MEM_ADDR_BITS downto ADDR_LSB);
 	      if (slv_reg_wren = '1') then
@@ -426,47 +426,7 @@ begin
 	                slv_reg15(byte_index*8+7 downto byte_index*8) <= S_AXI_WDATA(byte_index*8+7 downto byte_index*8);
 	              end if;
 	            end loop;
-	          ---- Do not allow to write to slv_reg16 to slv_reg20, they are read only for the master (also avoids having two processes assign to the same signal)
---	          when b"10000" =>
---	            for byte_index in 0 to (C_S_AXI_DATA_WIDTH/8-1) loop
---	              if ( S_AXI_WSTRB(byte_index) = '1' ) then
---	                -- Respective byte enables are asserted as per write strobes                   
---	                -- slave registor 16
---	                slv_reg16(byte_index*8+7 downto byte_index*8) <= S_AXI_WDATA(byte_index*8+7 downto byte_index*8);
---	              end if;
---	            end loop;
---	          when b"10001" =>
---	            for byte_index in 0 to (C_S_AXI_DATA_WIDTH/8-1) loop
---	              if ( S_AXI_WSTRB(byte_index) = '1' ) then
---	                -- Respective byte enables are asserted as per write strobes                   
---	                -- slave registor 17
---	                slv_reg17(byte_index*8+7 downto byte_index*8) <= S_AXI_WDATA(byte_index*8+7 downto byte_index*8);
---	              end if;
---	            end loop;
---	          when b"10010" =>
---	            for byte_index in 0 to (C_S_AXI_DATA_WIDTH/8-1) loop
---	              if ( S_AXI_WSTRB(byte_index) = '1' ) then
---	                -- Respective byte enables are asserted as per write strobes                   
---	                -- slave registor 18
---	                slv_reg18(byte_index*8+7 downto byte_index*8) <= S_AXI_WDATA(byte_index*8+7 downto byte_index*8);
---	              end if;
---	            end loop;
---	          when b"10011" =>
---	            for byte_index in 0 to (C_S_AXI_DATA_WIDTH/8-1) loop
---	              if ( S_AXI_WSTRB(byte_index) = '1' ) then
---	                -- Respective byte enables are asserted as per write strobes                   
---	                -- slave registor 19
---	                slv_reg19(byte_index*8+7 downto byte_index*8) <= S_AXI_WDATA(byte_index*8+7 downto byte_index*8);
---	              end if;
---	            end loop;
---	          when b"10100" =>
---	            for byte_index in 0 to (C_S_AXI_DATA_WIDTH/8-1) loop
---	              if ( S_AXI_WSTRB(byte_index) = '1' ) then
---	                -- Respective byte enables are asserted as per write strobes                   
---	                -- slave registor 20
---	                slv_reg20(byte_index*8+7 downto byte_index*8) <= S_AXI_WDATA(byte_index*8+7 downto byte_index*8);
---	              end if;
---	            end loop;
+	          -- Do not allow to write to slv_reg16 to slv_reg20, they are read only for the master (also avoids having two processes assign to the same signal)
 	          when others =>
 	            slv_reg0 <= slv_reg0;
 	            slv_reg1 <= slv_reg1;
@@ -484,11 +444,6 @@ begin
 	            slv_reg13 <= slv_reg13;
 	            slv_reg14 <= slv_reg14;
 	            slv_reg15 <= slv_reg15;
---	            slv_reg16 <= slv_reg16;
---	            slv_reg17 <= slv_reg17;
---	            slv_reg18 <= slv_reg18;
---	            slv_reg19 <= slv_reg19;
---	            slv_reg20 <= slv_reg20;
 	        end case;
 	      end if;
 	    end if;
@@ -651,7 +606,7 @@ begin
     -- Add user logic here
 
     -- Assign output from CTRSpeck to AXI registers
-    process(S_AXI_ACLK) is
+    process(S_AXI_ACLK, S_AXI_ARESETN, S_REG16_IN, S_REG17_IN, S_REG18_IN, S_REG19_IN, S_REG20_IN) is
     begin
         if S_AXI_ARESETN = '0' then
             slv_reg16 <= (others => '0');
