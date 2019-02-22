@@ -149,11 +149,11 @@ CTR: process(data_in, key, nonce, valid, clk, reset)
                 -- Set ready to valid_temp, which will be '1' when a new value has passed through the pipeline
                 ready <= valid_temp;
             end if;
-            
-            -- Set input signals for the encryption pipeline
-            plaintext_valid <= data_valid_temp;
-            key_valid <= key_valid_temp;
         end if;
+        
+        -- Set input signals for the encryption pipeline
+        plaintext_valid <= data_valid_temp;
+        key_valid <= key_valid_temp;
     end process;
 
 end Behavioral;
