@@ -261,8 +261,8 @@ Speck_AXI_v2_0_S00_AXI_inst : Speck_AXI_v2_0_S00_AXI
     valid <= valid_register_0(0);    
     reset <= cipher_ctrl_register_0(0);
     
-    ready <= cipher_stat_register_0(0);
-    ctr_wrap <= cipher_stat_register_0(1);
+    cipher_stat_register_0(0) <= ready;
+    cipher_stat_register_0(1) <= ctr_wrap;
         
     BLOCK_SIZE_32: if(BLOCK_SIZE=32) generate
         begin
