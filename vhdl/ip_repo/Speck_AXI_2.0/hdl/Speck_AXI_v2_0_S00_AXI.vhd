@@ -263,9 +263,14 @@ begin
 	-- and the slave is ready to accept the write address and write data.
 	slv_reg_wren <= axi_wready and S_AXI_WVALID and axi_awready and S_AXI_AWVALID ;
 
-	process (S_AXI_ACLK)
+	process (S_AXI_ACLK, slv_reg15)
 	variable loc_addr :std_logic_vector(OPT_MEM_ADDR_BITS downto 0); 
 	begin
+	  -- Reset 'valid' signal automatically after half a clock cycle.
+	  if slv_reg15(0) = '1' and falling_edge(S_AXI_ACLK) then
+	      slv_reg15(0) <= '0';
+	  end if;
+
 	  if rising_edge(S_AXI_ACLK) then
 	    if S_AXI_ARESETN = '0' then
 	      slv_reg0 <= (others => '0');
@@ -284,11 +289,11 @@ begin
 	      slv_reg13 <= (others => '0');
 	      slv_reg14 <= (others => '0');
 	      slv_reg15 <= (others => '0');
-	      slv_reg16 <= (others => '0');
-	      slv_reg17 <= (others => '0');
-	      slv_reg18 <= (others => '0');
-	      slv_reg19 <= (others => '0');
-	      slv_reg20 <= (others => '0');
+--	      slv_reg16 <= (others => '0');
+--	      slv_reg17 <= (others => '0');
+--	      slv_reg18 <= (others => '0');
+--	      slv_reg19 <= (others => '0');
+--	      slv_reg20 <= (others => '0');
 	    else
 	      loc_addr := axi_awaddr(ADDR_LSB + OPT_MEM_ADDR_BITS downto ADDR_LSB);
 	      if (slv_reg_wren = '1') then
@@ -479,19 +484,14 @@ begin
 	            slv_reg13 <= slv_reg13;
 	            slv_reg14 <= slv_reg14;
 	            slv_reg15 <= slv_reg15;
-	            slv_reg16 <= slv_reg16;
-	            slv_reg17 <= slv_reg17;
-	            slv_reg18 <= slv_reg18;
-	            slv_reg19 <= slv_reg19;
-	            slv_reg20 <= slv_reg20;
+--	            slv_reg16 <= slv_reg16;
+--	            slv_reg17 <= slv_reg17;
+--	            slv_reg18 <= slv_reg18;
+--	            slv_reg19 <= slv_reg19;
+--	            slv_reg20 <= slv_reg20;
 	        end case;
 	      end if;
 	    end if;
-	  else
-	     -- Reset 'valid' signal automatically after half a clock cycle.
-         if slv_reg15(0) = '1' and falling_edge(S_AXI_ACLK) then
-            slv_reg15(0) <= '0';
-         end if;
 	  end if;                   
 	end process; 
 
@@ -653,11 +653,19 @@ begin
     -- Assign output from CTRSpeck to AXI registers
     process(S_AXI_ACLK) is
     begin
-        slv_reg16 <= S_REG16_IN;
-        slv_reg17 <= S_REG17_IN;
-        slv_reg18 <= S_REG18_IN;
-        slv_reg19 <= S_REG19_IN;
-        slv_reg20 <= S_REG20_IN;
+        if S_AXI_ARESETN = '0' then
+            slv_reg16 <= (others => '0');
+            slv_reg17 <= (others => '0');
+            slv_reg18 <= (others => '0');
+            slv_reg19 <= (others => '0');
+            slv_reg20 <= (others => '0');
+        else
+            slv_reg16 <= S_REG16_IN;
+            slv_reg17 <= S_REG17_IN;
+            slv_reg18 <= S_REG18_IN;
+            slv_reg19 <= S_REG19_IN;
+            slv_reg20 <= S_REG20_IN;
+        end if;
     end process;
 
     -- AXI registers connected to CTRSpeck input
