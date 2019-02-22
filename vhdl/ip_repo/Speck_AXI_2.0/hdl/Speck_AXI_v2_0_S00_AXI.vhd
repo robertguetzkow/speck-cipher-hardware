@@ -17,29 +17,29 @@ entity Speck_AXI_v2_0_S00_AXI is
     port (
         -- Users to add ports here
         ------------------ Ports to read from the registers ----------------- 
-        -- Cipher data_valid_in
-        S_REG00_OUT: out STD_LOGIC_VECTOR(C_S_AXI_DATA_WIDTH - 1 downto 0);
-        
         -- Cipher data_in
-        S_REG01_OUT: out STD_LOGIC_VECTOR(C_S_AXI_DATA_WIDTH - 1 downto 0);
+        S_REG00_OUT: out STD_LOGIC_VECTOR(C_S_AXI_DATA_WIDTH - 1 downto 0);
+        S_REG01_OUT: out STD_LOGIC_VECTOR(C_S_AXI_DATA_WIDTH - 1  downto 0);
         S_REG02_OUT: out STD_LOGIC_VECTOR(C_S_AXI_DATA_WIDTH - 1  downto 0);
         S_REG03_OUT: out STD_LOGIC_VECTOR(C_S_AXI_DATA_WIDTH - 1  downto 0);
-        S_REG04_OUT: out STD_LOGIC_VECTOR(C_S_AXI_DATA_WIDTH - 1  downto 0);
         
         -- Cipher key
+        S_REG04_OUT: out STD_LOGIC_VECTOR(C_S_AXI_DATA_WIDTH - 1  downto 0);
         S_REG05_OUT: out STD_LOGIC_VECTOR(C_S_AXI_DATA_WIDTH - 1  downto 0);
         S_REG06_OUT: out STD_LOGIC_VECTOR(C_S_AXI_DATA_WIDTH - 1  downto 0);
         S_REG07_OUT: out STD_LOGIC_VECTOR(C_S_AXI_DATA_WIDTH - 1  downto 0);
-        S_REG08_OUT: out STD_LOGIC_VECTOR(C_S_AXI_DATA_WIDTH - 1  downto 0);
         
+        S_REG08_OUT: out STD_LOGIC_VECTOR(C_S_AXI_DATA_WIDTH - 1  downto 0);
         S_REG09_OUT: out STD_LOGIC_VECTOR(C_S_AXI_DATA_WIDTH - 1  downto 0);
         S_REG10_OUT: out STD_LOGIC_VECTOR(C_S_AXI_DATA_WIDTH - 1  downto 0);
         S_REG11_OUT: out STD_LOGIC_VECTOR(C_S_AXI_DATA_WIDTH - 1  downto 0);
-        S_REG12_OUT: out STD_LOGIC_VECTOR(C_S_AXI_DATA_WIDTH - 1  downto 0);
         
         -- Cipher nonce
+        S_REG12_OUT: out STD_LOGIC_VECTOR(C_S_AXI_DATA_WIDTH - 1  downto 0);
         S_REG13_OUT: out STD_LOGIC_VECTOR(C_S_AXI_DATA_WIDTH - 1  downto 0);
-        S_REG14_OUT: out STD_LOGIC_VECTOR(C_S_AXI_DATA_WIDTH - 1  downto 0);
+        
+        -- Cipher valid
+        S_REG14_OUT: out STD_LOGIC_VECTOR(C_S_AXI_DATA_WIDTH - 1 downto 0);
         
         -- Cipher reset
         S_REG15_OUT: out STD_LOGIC_VECTOR(C_S_AXI_DATA_WIDTH - 1  downto 0);
@@ -266,7 +266,7 @@ begin
 	process (S_AXI_ACLK)
 	variable loc_addr :std_logic_vector(OPT_MEM_ADDR_BITS downto 0); 
 	begin
-	  if rising_edge(S_AXI_ACLK) then 
+	  if rising_edge(S_AXI_ACLK) then
 	    if S_AXI_ARESETN = '0' then
 	      slv_reg0 <= (others => '0');
 	      slv_reg1 <= (others => '0');
@@ -421,46 +421,47 @@ begin
 	                slv_reg15(byte_index*8+7 downto byte_index*8) <= S_AXI_WDATA(byte_index*8+7 downto byte_index*8);
 	              end if;
 	            end loop;
-	          when b"10000" =>
-	            for byte_index in 0 to (C_S_AXI_DATA_WIDTH/8-1) loop
-	              if ( S_AXI_WSTRB(byte_index) = '1' ) then
-	                -- Respective byte enables are asserted as per write strobes                   
-	                -- slave registor 16
-	                slv_reg16(byte_index*8+7 downto byte_index*8) <= S_AXI_WDATA(byte_index*8+7 downto byte_index*8);
-	              end if;
-	            end loop;
-	          when b"10001" =>
-	            for byte_index in 0 to (C_S_AXI_DATA_WIDTH/8-1) loop
-	              if ( S_AXI_WSTRB(byte_index) = '1' ) then
-	                -- Respective byte enables are asserted as per write strobes                   
-	                -- slave registor 17
-	                slv_reg17(byte_index*8+7 downto byte_index*8) <= S_AXI_WDATA(byte_index*8+7 downto byte_index*8);
-	              end if;
-	            end loop;
-	          when b"10010" =>
-	            for byte_index in 0 to (C_S_AXI_DATA_WIDTH/8-1) loop
-	              if ( S_AXI_WSTRB(byte_index) = '1' ) then
-	                -- Respective byte enables are asserted as per write strobes                   
-	                -- slave registor 18
-	                slv_reg18(byte_index*8+7 downto byte_index*8) <= S_AXI_WDATA(byte_index*8+7 downto byte_index*8);
-	              end if;
-	            end loop;
-	          when b"10011" =>
-	            for byte_index in 0 to (C_S_AXI_DATA_WIDTH/8-1) loop
-	              if ( S_AXI_WSTRB(byte_index) = '1' ) then
-	                -- Respective byte enables are asserted as per write strobes                   
-	                -- slave registor 19
-	                slv_reg19(byte_index*8+7 downto byte_index*8) <= S_AXI_WDATA(byte_index*8+7 downto byte_index*8);
-	              end if;
-	            end loop;
-	          when b"10100" =>
-	            for byte_index in 0 to (C_S_AXI_DATA_WIDTH/8-1) loop
-	              if ( S_AXI_WSTRB(byte_index) = '1' ) then
-	                -- Respective byte enables are asserted as per write strobes                   
-	                -- slave registor 20
-	                slv_reg20(byte_index*8+7 downto byte_index*8) <= S_AXI_WDATA(byte_index*8+7 downto byte_index*8);
-	              end if;
-	            end loop;
+	          ---- Do not allow to write to slv_reg16 to slv_reg20, they are read only for the master (also avoids having two processes assign to the same signal)
+--	          when b"10000" =>
+--	            for byte_index in 0 to (C_S_AXI_DATA_WIDTH/8-1) loop
+--	              if ( S_AXI_WSTRB(byte_index) = '1' ) then
+--	                -- Respective byte enables are asserted as per write strobes                   
+--	                -- slave registor 16
+--	                slv_reg16(byte_index*8+7 downto byte_index*8) <= S_AXI_WDATA(byte_index*8+7 downto byte_index*8);
+--	              end if;
+--	            end loop;
+--	          when b"10001" =>
+--	            for byte_index in 0 to (C_S_AXI_DATA_WIDTH/8-1) loop
+--	              if ( S_AXI_WSTRB(byte_index) = '1' ) then
+--	                -- Respective byte enables are asserted as per write strobes                   
+--	                -- slave registor 17
+--	                slv_reg17(byte_index*8+7 downto byte_index*8) <= S_AXI_WDATA(byte_index*8+7 downto byte_index*8);
+--	              end if;
+--	            end loop;
+--	          when b"10010" =>
+--	            for byte_index in 0 to (C_S_AXI_DATA_WIDTH/8-1) loop
+--	              if ( S_AXI_WSTRB(byte_index) = '1' ) then
+--	                -- Respective byte enables are asserted as per write strobes                   
+--	                -- slave registor 18
+--	                slv_reg18(byte_index*8+7 downto byte_index*8) <= S_AXI_WDATA(byte_index*8+7 downto byte_index*8);
+--	              end if;
+--	            end loop;
+--	          when b"10011" =>
+--	            for byte_index in 0 to (C_S_AXI_DATA_WIDTH/8-1) loop
+--	              if ( S_AXI_WSTRB(byte_index) = '1' ) then
+--	                -- Respective byte enables are asserted as per write strobes                   
+--	                -- slave registor 19
+--	                slv_reg19(byte_index*8+7 downto byte_index*8) <= S_AXI_WDATA(byte_index*8+7 downto byte_index*8);
+--	              end if;
+--	            end loop;
+--	          when b"10100" =>
+--	            for byte_index in 0 to (C_S_AXI_DATA_WIDTH/8-1) loop
+--	              if ( S_AXI_WSTRB(byte_index) = '1' ) then
+--	                -- Respective byte enables are asserted as per write strobes                   
+--	                -- slave registor 20
+--	                slv_reg20(byte_index*8+7 downto byte_index*8) <= S_AXI_WDATA(byte_index*8+7 downto byte_index*8);
+--	              end if;
+--	            end loop;
 	          when others =>
 	            slv_reg0 <= slv_reg0;
 	            slv_reg1 <= slv_reg1;
@@ -486,6 +487,11 @@ begin
 	        end case;
 	      end if;
 	    end if;
+	  else
+	     -- Reset 'valid' signal automatically after half a clock cycle.
+         if slv_reg15(0) = '1' and falling_edge(S_AXI_ACLK) then
+            slv_reg15(0) <= '0';
+         end if;
 	  end if;                   
 	end process; 
 
@@ -642,13 +648,36 @@ begin
 	end process;
 
 
-	-- Add user logic here
-    --process(S_AXI_ACLK) is
-    --begin
-        -- if registerthatholddatavalid(0) = '1' and falling_edge(S_AXI_ACLK) then
-        --    registerthatholddatavalid(0) = '0';
-        -- end if;
-    --end process;
-	-- User logic ends
+    -- Add user logic here
+
+    -- Assign output from CTRSpeck to AXI registers
+    process(S_AXI_ACLK) is
+    begin
+        slv_reg16 <= S_REG16_IN;
+        slv_reg17 <= S_REG17_IN;
+        slv_reg18 <= S_REG18_IN;
+        slv_reg19 <= S_REG19_IN;
+        slv_reg20 <= S_REG20_IN;
+    end process;
+
+    -- AXI registers connected to CTRSpeck input
+    S_REG00_OUT <= slv_reg0;
+    S_REG01_OUT <= slv_reg1;
+    S_REG02_OUT <= slv_reg2;
+    S_REG03_OUT <= slv_reg3;
+    S_REG04_OUT <= slv_reg4;
+    S_REG05_OUT <= slv_reg5;
+    S_REG06_OUT <= slv_reg6;
+    S_REG07_OUT <= slv_reg7;
+    S_REG08_OUT <= slv_reg8;
+    S_REG09_OUT <= slv_reg9;
+    S_REG10_OUT <= slv_reg10;
+    S_REG11_OUT <= slv_reg11;
+    S_REG12_OUT <= slv_reg12;
+    S_REG13_OUT <= slv_reg13;
+    S_REG14_OUT <= slv_reg14;
+    S_REG15_OUT <= slv_reg15;
+    
+    -- User logic ends
 
 end arch_imp;
