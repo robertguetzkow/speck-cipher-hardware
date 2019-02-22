@@ -94,6 +94,9 @@ architecture arch_imp of Speck_AXI_v2_0 is
             
             -- Cipher status (ready, ctr_wrap)
             S_REG20_IN: in STD_LOGIC_VECTOR(C_S00_AXI_DATA_WIDTH - 1  downto 0);
+            
+            -- Reset valid if set to '1'
+            S_RESET_VALID: in std_logic;
             --------------------------------------------------------------------
 		
             S_AXI_ACLK      : in std_logic;
@@ -132,7 +135,8 @@ architecture arch_imp of Speck_AXI_v2_0 is
             valid: in std_logic;
             clk: in std_logic;
             reset: in std_logic;
-            data_out: out UNSIGNED(BLOCK_SIZE - 1 downto 0); 
+            data_out: out UNSIGNED(BLOCK_SIZE - 1 downto 0);
+            reset_valid: out std_logic; 
             ready: out std_logic;
             ctr_wrap: out std_logic
         );
@@ -166,6 +170,8 @@ architecture arch_imp of Speck_AXI_v2_0 is
     signal data_out_register_3: std_logic_vector(C_S00_AXI_DATA_WIDTH - 1 downto 0);
     
     signal cipher_stat_register_0: std_logic_vector(C_S00_AXI_DATA_WIDTH - 1 downto 0);
+    
+    signal reset_valid_register_0: std_logic;
     -----------------------------------------------------------------------------------
     
     -------- Signals for CTRSpeck --------
@@ -176,6 +182,7 @@ architecture arch_imp of Speck_AXI_v2_0 is
     signal reset: std_logic;
     
     signal data_out: UNSIGNED(BLOCK_SIZE - 1 downto 0);
+    signal reset_valid: std_logic;
     signal ready: std_logic;
     signal ctr_wrap: std_logic;
     ----------------------------------
@@ -217,6 +224,8 @@ Speck_AXI_v2_0_S00_AXI_inst : Speck_AXI_v2_0_S00_AXI
         
         S_REG20_IN => cipher_stat_register_0,
         
+        S_RESET_VALID => reset_valid_register_0,
+        
         S_AXI_ACLK      => s00_axi_aclk,
         S_AXI_ARESETN   => s00_axi_aresetn,
         S_AXI_AWADDR    => s00_axi_awaddr,
@@ -254,6 +263,7 @@ Speck_AXI_v2_0_S00_AXI_inst : Speck_AXI_v2_0_S00_AXI
             clk => s00_axi_aclk,
             reset => reset,
             data_out => data_out,
+            reset_valid => reset_valid,
             ready => ready,
             ctr_wrap => ctr_wrap
         );
@@ -262,7 +272,8 @@ Speck_AXI_v2_0_S00_AXI_inst : Speck_AXI_v2_0_S00_AXI
     reset <= cipher_ctrl_register_0(0);
     
     cipher_stat_register_0(0) <= ready;
-    cipher_stat_register_0(1) <= ctr_wrap;
+    cipher_stat_register_0(1) <= ctr_wrap;   
+    reset_valid_register_0 <= reset_valid;
         
     BLOCK_SIZE_32: if(BLOCK_SIZE=32) generate
         begin

@@ -56,6 +56,7 @@ entity CTRSpeck is
         clk: in std_logic;
         reset: in std_logic;
         data_out: out UNSIGNED(BLOCK_SIZE - 1 downto 0);
+        reset_valid: out std_logic; -- Set to '1' when valid has been '1' and can be reset
         ready: out std_logic; -- Set to '1' when new output is ready
         ctr_wrap: out std_logic -- Set to '1' when counter wraps. When this happens change the nonce!
     );
@@ -109,6 +110,7 @@ CTR: process(data_in, key, nonce, valid, clk, reset)
         if reset = '1' then
             counter := to_unsigned(0, counter'length);
             shift_reg_valid := to_unsigned(0, shift_reg_valid'length);
+            reset_valid <= '0';
             ready <= '0';
             ctr_wrap <= '0';
         else      
@@ -126,6 +128,9 @@ CTR: process(data_in, key, nonce, valid, clk, reset)
                     data_valid_temp := nonce & counter(WORD_SIZE - 1 downto 0);
                     key_valid_temp := key;
                     counter := counter + 1;
+                    reset_valid <= '1';
+                else
+                    reset_valid <= '0';
                 end if;
             
                 -- Get the data_in corresponding to the latest output of the pipeline

@@ -54,6 +54,9 @@ entity Speck_AXI_v2_0_S00_AXI is
         
         -- Cipher status (ready, ctr_wrap)
         S_REG20_IN: in STD_LOGIC_VECTOR(C_S_AXI_DATA_WIDTH - 1  downto 0);
+        
+        -- Reset valid if set to '1'
+        S_RESET_VALID: in std_logic;
         --------------------------------------------------------------------
         -- User ports ends
         -- Do not modify the ports beyond this line
@@ -263,19 +266,15 @@ begin
 	-- and the slave is ready to accept the write address and write data.
 	slv_reg_wren <= axi_wready and S_AXI_WVALID and axi_awready and S_AXI_AWVALID ;
 
-	process (S_AXI_ACLK, slv_reg14)
+	process (S_AXI_ACLK, S_RESET_VALID)
 	variable loc_addr :std_logic_vector(OPT_MEM_ADDR_BITS downto 0); 
 	begin
-	  -- Reset 'valid' signal automatically after half a clock cycle.
---	  if slv_reg14(0) = '1' and falling_edge(S_AXI_ACLK) then
---	      slv_reg14(0) <= '0';
---	  end if;
+
+      if S_RESET_VALID = '1' then
+         slv_reg14(0) <= '0';
+      end if;
 
 	  if rising_edge(S_AXI_ACLK) then
-	    if slv_reg14(0) = '1' then  
-	      -- Reset 'valid' signal automatically after a clock cycle.
-	      slv_reg14(0) <= '0';
-	    end if;
 	  
 	    if S_AXI_ARESETN = '0' then
 	      slv_reg0 <= (others => '0');
