@@ -92,7 +92,10 @@ architecture arch_imp of Speck_AXI_v2_0 is
             S_REG18_IN: in STD_LOGIC_VECTOR(C_S00_AXI_DATA_WIDTH - 1  downto 0);
             S_REG19_IN: in STD_LOGIC_VECTOR(C_S00_AXI_DATA_WIDTH - 1  downto 0);
             
-            -- Cipher status (ready, ctr_wrap)
+            -- Cipher status (ready_changed, is_ready, ctr_wrap)
+            -- ready_changed: Switches between '0' and '1' whenever ready is '1', 
+            --                this allows to poll for changes from the AXI master.
+            -- is_ready: Remains '1' once ready is '1' until reset occurs
             S_REG20_IN: in STD_LOGIC_VECTOR(C_S00_AXI_DATA_WIDTH - 1  downto 0);
             
             -- Reset valid if set to '1'
@@ -271,8 +274,9 @@ Speck_AXI_v2_0_S00_AXI_inst : Speck_AXI_v2_0_S00_AXI
     valid <= valid_register_0(0);    
     reset <= cipher_ctrl_register_0(0);
     
-    cipher_stat_register_0(0) <= ready;
-    cipher_stat_register_0(1) <= ctr_wrap;   
+    cipher_stat_register_0(0) <= cipher_stat_register_0(0) xor ready; -- 'ready_changes': Always changes to opposite value of the register when ready is '1'
+    cipher_stat_register_0(1) <= cipher_stat_register_0(1) or ready; -- 'is_ready': Set to '1' when ready '1', then remains '1' until reset
+    cipher_stat_register_0(2) <= ctr_wrap;   
     reset_valid_register_0 <= reset_valid;
         
     BLOCK_SIZE_32: if(BLOCK_SIZE=32) generate

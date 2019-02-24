@@ -52,7 +52,10 @@ entity Speck_AXI_v2_0_S00_AXI is
         S_REG18_IN: in STD_LOGIC_VECTOR(C_S_AXI_DATA_WIDTH - 1  downto 0);
         S_REG19_IN: in STD_LOGIC_VECTOR(C_S_AXI_DATA_WIDTH - 1  downto 0);
         
-        -- Cipher status (ready, ctr_wrap)
+        -- Cipher status (ready_changed, is_ready, ctr_wrap)
+        -- ready_changed: Switches between '0' and '1' whenever ready is '1', 
+        --                this allows to poll for changes from the AXI master.
+        -- is_ready: Remains '1' once ready is '1' until reset occurs
         S_REG20_IN: in STD_LOGIC_VECTOR(C_S_AXI_DATA_WIDTH - 1  downto 0);
         
         -- Reset valid if set to '1'
