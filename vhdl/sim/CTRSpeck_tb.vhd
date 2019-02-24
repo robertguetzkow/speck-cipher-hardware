@@ -50,6 +50,7 @@ architecture Behavioral of CTRSpeck_tb is
     signal valid_32_64: std_logic := '0';
     signal reset_32_64: std_logic := '0';
     signal data_out_32_64: UNSIGNED(32 - 1 downto 0);
+    signal reset_valid_32_64: std_logic;
     signal ready_32_64: std_logic;
     signal ctr_wrap_32_64: std_logic;
     
@@ -59,6 +60,7 @@ architecture Behavioral of CTRSpeck_tb is
     signal valid_48_72: std_logic := '0';
     signal reset_48_72: std_logic := '0';
     signal data_out_48_72: UNSIGNED(48 - 1 downto 0);
+    signal reset_valid_48_72: std_logic;
     signal ready_48_72: std_logic;
     signal ctr_wrap_48_72: std_logic;
     
@@ -68,6 +70,7 @@ architecture Behavioral of CTRSpeck_tb is
     signal valid_48_96: std_logic := '0';
     signal reset_48_96: std_logic := '0';
     signal data_out_48_96: UNSIGNED(48 - 1 downto 0);
+    signal reset_valid_48_96: std_logic;
     signal ready_48_96: std_logic;
     signal ctr_wrap_48_96: std_logic;
     
@@ -77,6 +80,7 @@ architecture Behavioral of CTRSpeck_tb is
     signal valid_64_96: std_logic := '0';
     signal reset_64_96: std_logic := '0';
     signal data_out_64_96: UNSIGNED(64 - 1 downto 0);
+    signal reset_valid_64_96: std_logic;
     signal ready_64_96: std_logic;
     signal ctr_wrap_64_96: std_logic;
     
@@ -86,6 +90,7 @@ architecture Behavioral of CTRSpeck_tb is
     signal valid_64_128: std_logic := '0';
     signal reset_64_128: std_logic := '0';
     signal data_out_64_128: UNSIGNED(64 - 1 downto 0);
+    signal reset_valid_64_128: std_logic;
     signal ready_64_128: std_logic;
     signal ctr_wrap_64_128: std_logic;
     
@@ -95,6 +100,7 @@ architecture Behavioral of CTRSpeck_tb is
     signal valid_96_96: std_logic := '0';
     signal reset_96_96: std_logic := '0';
     signal data_out_96_96: UNSIGNED(96 - 1 downto 0);
+    signal reset_valid_96_96: std_logic;
     signal ready_96_96: std_logic;
     signal ctr_wrap_96_96: std_logic;  
     
@@ -104,6 +110,7 @@ architecture Behavioral of CTRSpeck_tb is
     signal valid_96_144: std_logic := '0';
     signal reset_96_144: std_logic := '0';
     signal data_out_96_144: UNSIGNED(96 - 1 downto 0);
+    signal reset_valid_96_144: std_logic;
     signal ready_96_144: std_logic;
     signal ctr_wrap_96_144: std_logic;
     
@@ -113,6 +120,7 @@ architecture Behavioral of CTRSpeck_tb is
     signal valid_128_128: std_logic := '0';
     signal reset_128_128: std_logic := '0';
     signal data_out_128_128: UNSIGNED(128 - 1 downto 0);
+    signal reset_valid_128_128: std_logic;
     signal ready_128_128: std_logic;
     signal ctr_wrap_128_128: std_logic;
     
@@ -122,6 +130,7 @@ architecture Behavioral of CTRSpeck_tb is
     signal valid_128_192: std_logic := '0';
     signal reset_128_192: std_logic := '0';
     signal data_out_128_192: UNSIGNED(128 - 1 downto 0);
+    signal reset_valid_128_192: std_logic;
     signal ready_128_192: std_logic;
     signal ctr_wrap_128_192: std_logic;
         
@@ -131,6 +140,7 @@ architecture Behavioral of CTRSpeck_tb is
     signal valid_128_256: std_logic := '0';
     signal reset_128_256: std_logic := '0';
     signal data_out_128_256: UNSIGNED(128 - 1 downto 0);
+    signal reset_valid_128_256: std_logic;
     signal ready_128_256: std_logic;
     signal ctr_wrap_128_256: std_logic; 
 
@@ -153,7 +163,8 @@ CTRSpeck_32_64: entity work.CTRSpeck
         valid => valid_32_64,
         clk => clk,
         reset => reset_32_64,
-        data_out => data_out_32_64, 
+        data_out => data_out_32_64,
+        reset_valid => reset_valid_32_64, 
         ready => ready_32_64,
         ctr_wrap => ctr_wrap_32_64
     );
@@ -167,7 +178,8 @@ CTRSpeck_48_72: entity work.CTRSpeck
         valid => valid_48_72,
         clk => clk,
         reset => reset_48_72,
-        data_out => data_out_48_72, 
+        data_out => data_out_48_72,
+        reset_valid => reset_valid_48_72, 
         ready => ready_48_72,
         ctr_wrap => ctr_wrap_48_72
     );
@@ -181,7 +193,8 @@ CTRSpeck_48_96: entity work.CTRSpeck
         valid => valid_48_96,
         clk => clk,
         reset => reset_48_96,
-        data_out => data_out_48_96, 
+        data_out => data_out_48_96,
+        reset_valid => reset_valid_48_96,
         ready => ready_48_96,
         ctr_wrap => ctr_wrap_48_96
     );
@@ -195,7 +208,8 @@ CTRSpeck_64_96: entity work.CTRSpeck
         valid => valid_64_96,
         clk => clk,
         reset => reset_64_96,
-        data_out => data_out_64_96, 
+        data_out => data_out_64_96,
+        reset_valid => reset_valid_64_96,
         ready => ready_64_96,
         ctr_wrap => ctr_wrap_64_96
     );
@@ -209,7 +223,8 @@ CTRSpeck_64_128: entity work.CTRSpeck
         valid => valid_64_128,
         clk => clk,
         reset => reset_64_128,
-        data_out => data_out_64_128, 
+        data_out => data_out_64_128,
+        reset_valid => reset_valid_64_128,
         ready => ready_64_128,
         ctr_wrap => ctr_wrap_64_128
     );
@@ -223,7 +238,8 @@ CTRSpeck_96_96: entity work.CTRSpeck
         valid => valid_96_96,
         clk => clk,
         reset => reset_96_96,
-        data_out => data_out_96_96, 
+        data_out => data_out_96_96,
+        reset_valid => reset_valid_96_96,
         ready => ready_96_96,
         ctr_wrap => ctr_wrap_96_96
     );
@@ -237,7 +253,8 @@ CTRSpeck_96_144: entity work.CTRSpeck
         valid => valid_96_144,
         clk => clk,
         reset => reset_96_144,
-        data_out => data_out_96_144, 
+        data_out => data_out_96_144,
+        reset_valid => reset_valid_96_144,
         ready => ready_96_144,
         ctr_wrap => ctr_wrap_96_144
     );
@@ -251,7 +268,8 @@ CTRSpeck_128_128: entity work.CTRSpeck
         valid => valid_128_128,
         clk => clk,
         reset => reset_128_128,
-        data_out => data_out_128_128, 
+        data_out => data_out_128_128,
+        reset_valid => reset_valid_128_128,
         ready => ready_128_128,
         ctr_wrap => ctr_wrap_128_128
     );
@@ -265,7 +283,8 @@ CTRSpeck_128_192: entity work.CTRSpeck
         valid => valid_128_192,
         clk => clk,
         reset => reset_128_192,
-        data_out => data_out_128_192, 
+        data_out => data_out_128_192,
+        reset_valid => reset_valid_128_192,
         ready => ready_128_192,
         ctr_wrap => ctr_wrap_128_192
     );
@@ -279,7 +298,8 @@ CTRSpeck_128_256: entity work.CTRSpeck
         valid => valid_128_256,
         clk => clk,
         reset => reset_128_256,
-        data_out => data_out_128_256, 
+        data_out => data_out_128_256,
+        reset_valid => reset_valid_128_256,
         ready => ready_128_256,
         ctr_wrap => ctr_wrap_128_256
     );
