@@ -273,11 +273,25 @@ Speck_AXI_v2_0_S00_AXI_inst : Speck_AXI_v2_0_S00_AXI
         
     valid <= valid_register_0(0);    
     reset <= cipher_ctrl_register_0(0);
-    
-    cipher_stat_register_0(0) <= cipher_stat_register_0(0) xor ready; -- 'ready_changes': Always changes to opposite value of the register when ready is '1'
-    cipher_stat_register_0(1) <= cipher_stat_register_0(1) or ready; -- 'is_ready': Set to '1' when ready '1', then remains '1' until reset
+          
     cipher_stat_register_0(2) <= ctr_wrap;   
     reset_valid_register_0 <= reset_valid;
+    
+    process(s00_axi_aclk)
+    begin
+        if rising_edge(s00_axi_aclk) then
+            if ready = '1' then
+                if cipher_stat_register_0(0) = '0' then
+                    cipher_stat_register_0(0) <= '1';
+                else
+                    cipher_stat_register_0(0) <= '0';
+                end if;
+                cipher_stat_register_0(1) <= '1';
+            else
+                cipher_stat_register_0(1) <= cipher_stat_register_0(1);
+            end if;
+        end if;
+    end process;
         
     BLOCK_SIZE_32: if(BLOCK_SIZE=32) generate
         begin
