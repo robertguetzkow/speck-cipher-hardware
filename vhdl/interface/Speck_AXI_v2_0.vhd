@@ -221,9 +221,9 @@ Speck_AXI_v2_0_S00_AXI_inst : Speck_AXI_v2_0_S00_AXI
         S_REG15_OUT => cipher_ctrl_register_0,
         
         S_REG16_IN => data_out_register_0,
-        S_REG17_IN => data_out_register_0,
-        S_REG18_IN => data_out_register_0,
-        S_REG19_IN => data_out_register_0,
+        S_REG17_IN => data_out_register_1,
+        S_REG18_IN => data_out_register_2,
+        S_REG19_IN => data_out_register_3,
         
         S_REG20_IN => cipher_stat_register_0,
         
