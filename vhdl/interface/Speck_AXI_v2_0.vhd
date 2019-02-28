@@ -289,6 +289,7 @@ Speck_AXI_v2_0_S00_AXI_inst : Speck_AXI_v2_0_S00_AXI
                 end if;
                 cipher_stat_register_0(1) <= '1';
             else
+                cipher_stat_register_0(0) <= cipher_stat_register_0(0);
                 cipher_stat_register_0(1) <= cipher_stat_register_0(1);
             end if;
         end if;
