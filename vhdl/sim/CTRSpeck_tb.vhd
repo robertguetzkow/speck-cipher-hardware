@@ -149,10 +149,10 @@ architecture Behavioral of CTRSpeck_tb is
 begin
 
 clock: process
-	begin
+    begin
         wait for CLK_HALF_PERIOD;
         clk <= not clk; 
-	end process;
+    end process;
 
 CTRSpeck_32_64: entity work.CTRSpeck
     generic map (32, 64)

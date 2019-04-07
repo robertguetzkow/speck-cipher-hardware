@@ -50,9 +50,9 @@ begin
 
 clock: process
     begin
-	   wait for CLK_HALF_PERIOD;
-	   clk <= not clk;
-	end process;
+       wait for CLK_HALF_PERIOD;
+       clk <= not clk;
+    end process;
 
 tb_key_schedule_32_64: process
             constant BLOCK_SIZE: INTEGER := 32;
@@ -5213,5 +5213,5 @@ tb_key_schedule_128_256: process
 
             report "128-Bit Block, 256-Bit Key, Key Schedule Round Test Done." severity note;
         end process;
-	          
+              
 end Behavioral;

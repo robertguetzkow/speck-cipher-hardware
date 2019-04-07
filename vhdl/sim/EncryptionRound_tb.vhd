@@ -108,10 +108,10 @@ architecture Behavioral of EncryptionRound_tb is
 begin
 
 clock: process
-	begin
+    begin
         wait for CLK_HALF_PERIOD;
         clk <= not clk; 
-	end process;
+    end process;
 
 EncryptionRound_32_64: entity work.EncryptionRound
     generic map (32, 64)

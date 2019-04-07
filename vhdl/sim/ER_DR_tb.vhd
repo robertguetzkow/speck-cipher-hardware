@@ -50,10 +50,10 @@ architecture Behavioral of ER_DR_tb is
 begin
 
 clock: process
-	begin
+    begin
         wait for CLK_HALF_PERIOD;
         clk <= not clk; 
-	end process;
+    end process;
 
 tb_er_32_64: process
             constant BLOCK_SIZE: INTEGER := 32;
