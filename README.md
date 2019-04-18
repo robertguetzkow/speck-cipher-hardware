@@ -1,9 +1,7 @@
 # Speck Cipher Hardware
-This repository contains a VHDL and Python implementation of the Speck cipher as specified in NSA documents [0,1]. The VHDL code of Speck is pipelined and allows to define the desired key and block sizes through generics. CTR is available as cipher mode for Speck in hardware. Additionally an AXI4-Lite interface is included which allows easy hardware/software co-design with FPGAs. Tests are provided for both VHDL and Python. 
+This repository contains a VHDL and Python implementation of the Speck cipher as specified in NSA documents [0,1]. The VHDL code of Speck is pipelined and allows to define the desired key and block sizes through generics. CTR is available as cipher mode for Speck in hardware. Tests are provided for both VHDL and Python. 
 
-**Update 2019-04-13: We currently don't have access to FPGA hardware and therefore aren't able to complete the implementation of the processor co-design with AXI4-Lite interface. We hope that you can still make good use of the completed design of the Speck cipher.**
-
-**Do not use this code to process sensitive information.** While we have done our best to ensure correctness, the code has not been audited and may be susceptible to cryptographic attacks. **The AXI interface is still work in progress.**
+**Do not use this code to process sensitive information.** While we have done our best to ensure correctness, the code has not been audited and may be susceptible to cryptographic attacks.
 
 ## Requirements
 The VHDL implementation of the cipher requires a VHDL-93 compatible synthesis tool. The VHDL testbenches use VHDL-2008 and therefore require a simulation tool that supports this standard, e.g. `Vivado 2016.4` and later. The Python implementation requires `Python 3.6` or later.
